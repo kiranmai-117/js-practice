@@ -1,14 +1,15 @@
-const input = " L L ZL ";
-let noOfSpaces = 0;
+const input = "ZL ZLL ";
+let noOfSpaces = 1;
 let nearestCount = 0;
 let index = 0;
 
-while (index < (input.length - 1)) {
+while ((index < (input.length - 1)) && noOfSpaces !== 0) {
   
   if (input[index] === " ") {
     index++;
     continue;
   }
+  noOfSpaces = 0;
 
   let currentTerm = input[index];
   while (input[++index] === " ") {
@@ -23,9 +24,8 @@ while (index < (input.length - 1)) {
     continue;
   }
 
-  if ((nearestCount > noOfSpaces) || nearestCount <= 0) {
+  if ((nearestCount > noOfSpaces) || nearestCount < 0) {
     nearestCount = noOfSpaces;
-    noOfSpaces = 0;
   }  
 }
 
