@@ -24,7 +24,7 @@ while ((index < (input.length - 1)) && noOfSpaces !== 0) {
     continue;
   }
 
-  if ((nearestCount > noOfSpaces) || nearestCount < 0) {
+  if ((nearestCount > noOfSpaces) || nearestCount <= 0) {
     nearestCount = noOfSpaces;
   }  
 }
