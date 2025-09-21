@@ -14,8 +14,6 @@ while ((index < (input.length - 1)) && noOfSpaces !== 0) {
   let currentTerm = input[index];
   while (input[++index] === " ") {
     noOfSpaces++;
-    console.log("no of spaces",noOfSpaces);
-    
   }
 
   if (input[index] === currentTerm) {
@@ -28,7 +26,6 @@ while ((index < (input.length - 1)) && noOfSpaces !== 0) {
 
   if ((minimumDistance > noOfSpaces) || minimumDistance <= 0) {
     minimumDistance = noOfSpaces;
-    console.log("nearst",minimumDistance);
   }  
 }
 
