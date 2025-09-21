@@ -1,5 +1,5 @@
 const input = "ZL ZLL ";
-let noOfSpaces = 1;
+let noOfSpaces = -1;
 let nearestCount = 0;
 let index = 0;
 
