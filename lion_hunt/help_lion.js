@@ -1,6 +1,6 @@
-const input = "ZL ZLL ";
+const input = " ZLL  ZZZ ";
 let noOfSpaces = -1;
-let nearestCount = 0;
+let minimumDistance = 0;
 let index = 0;
 
 while ((index < (input.length - 1)) && noOfSpaces !== 0) {
@@ -14,6 +14,8 @@ while ((index < (input.length - 1)) && noOfSpaces !== 0) {
   let currentTerm = input[index];
   while (input[++index] === " ") {
     noOfSpaces++;
+    console.log("no of spaces",noOfSpaces);
+    
   }
 
   if (input[index] === currentTerm) {
@@ -24,9 +26,10 @@ while ((index < (input.length - 1)) && noOfSpaces !== 0) {
     continue;
   }
 
-  if ((nearestCount > noOfSpaces) || nearestCount <= 0) {
-    nearestCount = noOfSpaces;
+  if ((minimumDistance > noOfSpaces) || minimumDistance <= 0) {
+    minimumDistance = noOfSpaces;
+    console.log("nearst",minimumDistance);
   }  
 }
 
-console.log("number of spaces away",nearestCount);
+console.log("number of spaces away",minimumDistance);
