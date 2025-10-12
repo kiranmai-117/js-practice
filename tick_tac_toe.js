@@ -2,54 +2,40 @@ function count(position, value, countX, countO) {
   const row = parseInt(position[0]);
   const col = parseInt(position[2]);
 
-  if (row === 1) {
-    countX[0] = value === "X" ? countX[0] + 1 : 0;
-    countO[0] = value === "O" ? countO[0] + 1 : 0;
+  if (row > 0) {
+    countX[row - 1] = value === "🔥" ? countX[row - 1] + 1 : 0;
+    countO[row - 1] = value === "🌊" ? countO[row - 1] + 1 : 0;
   }
-  if (row === 2) {
-    countX[1] = value === "X" ? countX[1] + 1 : 0;
-    countO[1] = value === "O" ? countO[1] + 1 : 0;
-  }
-  if (row === 3) {
-    countX[2] = value === "X" ? countX[2] + 1 : 0;
-    countO[2] = value === "O" ? countO[2] + 1 : 0;
-  }
-  if (col === 1) {
-    countX[3] = value === "X" ? countX[3] + 1 : 0;
-    countO[3] = value === "O" ? countO[3] + 1 : 0;
-  }
-  if (col === 2) {
-    countX[4] = value === "X" ? countX[4] + 1 : 0;
-    countO[4] = value === "O" ? countO[4] + 1 : 0;
-  }
-  if (col === 3) {
-    countX[5] = value === "X" ? countX[5] + 1 : 0;
-    countO[5] = value === "O" ? countO[5] + 1 : 0;
+  if (col > 0) {
+    countX[col + 2] = value === "🔥" ? countX[col + 2] + 1 : 0;
+    countO[col + 2] = value === "🌊" ? countO[col + 2] + 1 : 0;
   }
   if (col === row) {
-    countX[6] = value === "X" ? countX[6] + 1 : 0;
-    countO[6] = value === "O" ? countO[6] + 1 : 0;
+    countX[6] = value === "🔥" ? countX[6] + 1 : 0;
+    countO[6] = value === "🌊" ? countO[6] + 1 : 0;
   }
   if (col === row && row === 2 || Math.abs(col - row) === 2) {
-    countX[7] = value === "X" ? countX[7] + 1 : 0;
-    countO[7] = value === "O" ? countO[7] + 1 : 0;
+    countX[7] = value === "🔥" ? countX[7] + 1 : 0;
+    countO[7] = value === "🌊" ? countO[7] + 1 : 0;
   }
 }
 
 function isTriple(position, value, countX, countO) {
   count(position, value, countX, countO);
+  console.log("countX", countX);
+  console.log("countO", countO);
 
   if (countX.includes(3)) {
-    return "X";
+    return "🔥";
   }
   if (countO.includes(3)) {
-    return "O";
+    return "🌊";
   }
 }
 
 function updateBoard(board, row, col, value) {
   let box = board[row];
-  board[row] = box.slice(0, 3 * col) + value + box.slice(3 * col + 1);
+  board[row] = box.slice(0, 3 * col) + value + box.slice(3 * col + 2);
   return board;
 }
 
@@ -79,17 +65,17 @@ function turns(board, player1, player2) {
   let countO = [0, 0, 0, 0, 0, 0, 0, 0];
   for (let count = 0; count < 9; count++) {
     const player = count % 2 === 0 ? player1 : player2;
-    const value = player === player1 ? "X" : "O";
+    const value = player === player1 ? "🔥" : "🌊";
     console.log(player);
     const position = prompt("tell the position:");
     board = isValidPosition(board, position, value);
     console.clear();
     console.log(board.join("\n"));
     const tripleValue = isTriple(position, value, countX, countO);
-    if (tripleValue === "X") {
+    if (tripleValue === "🔥") {
       return player1;
     }
-    if (tripleValue === "O") {
+    if (tripleValue === "🌊") {
       return player2;
     }
   }
@@ -113,18 +99,22 @@ function generateBoard() {
 function win(Winner) {
   if (Winner === undefined) {
     console.log(" 🤝🤝🤝🤝🤝  match draw 🤝🤝🤝🤝🤝");
+    console.log(" 👉 if you want to play again \n");
+    console.log(" 👉 please press upward arrow and press enter \n");
     return;
   }
-  console.log(" 🏆🏆🏆🏆🏆🏆 congratulations  ", Winner, "🏆🏆🏆🏆🏆🏆\n");
+  console.log(" 🏆🏆🏆🏆🏆🏆 🥳 congratulations  ", Winner, " 🥳 🏆🏆🏆🏆🏆🏆\n");
+  console.log(" 👉 if you want to play again \n");
+  console.log(" 👉 please press upward arrow and press enter \n");
 }
 
 function play() {
   const players = prompt("enter player names:");
-  const index = players.indexOf(" ")
+  const index = players.indexOf(" ");
   const player1 = players.slice(0, index);
   const player2 = players.slice(index + 1);
-  console.log(player1, ": 'X'");
-  console.log(player2, ": 'O'");
+  console.log(player1, ": '🔥'");
+  console.log(player2, ": '🌊'");
   let board = generateBoard();
   console.log(board.join("\n"));
   const Winner = turns(board, player1, player2);
