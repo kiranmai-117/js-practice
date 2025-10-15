@@ -1,6 +1,23 @@
 const PLY1_SYL = "🔥";
 const PLY2_SYL = "🌊";
 
+function playAgain() {
+  console.log(" 👉 if you want to play again \n");
+  console.log(" 👉 please press upward arrow and press enter \n");
+}
+
+function endGame(symbol, player1, player2) {
+  const winner = symbol === PLY1_SYL ? player1 : player2;
+
+  if (winner === undefined) {
+    console.log(" 🤝🤝🤝🤝🤝  match draw 🤝🤝🤝🤝🤝");
+    playAgain();
+    return;
+  }
+  console.log(" 🏆🏆🏆🏆🏆🏆 🥳 congratulations  ", winner, " 🥳 🏆🏆🏆🏆🏆🏆\n");
+  playAgain();
+}
+
 function count(position, value, countX, countO) {
   const row = parseInt(position[0][0]);
   const col = parseInt(position[0][2]);
@@ -29,6 +46,10 @@ function count(position, value, countX, countO) {
 
 function isTriple(position, value, countX, countO) {
   count(position, value, countX, countO);
+
+  console.log("countX", countX);
+  console.log("countO", countO);
+
   return countX.includes(3) || countO.includes(3);
 }
 
@@ -63,6 +84,7 @@ function isValidCell(board, position, value, cell) {
   return true;
 }
 
+
 function turns(board, player1, player2, countX, countO) {
   const cell = [];
 
@@ -73,20 +95,20 @@ function turns(board, player1, player2, countX, countO) {
 
     console.log(player);
     const position = [prompt("tell the position:")];
-    
+
     if (isValidCell(board, position, symbol, cell)) {
       updateBoard(board, cell, symbol);
     }
 
     console.clear();
     console.log(board.join("\n"));
-    
+
     if (isTriple(position, symbol, countX, countO)) {
-      win(symbol, player1, player2);
+      endGame(symbol, player1, player2);
       return;
     }
   }
-  win();
+  endGame();
 }
 
 function generateLine(row, cols = 18, char = "-|") {
@@ -104,19 +126,6 @@ function generateBoard() {
   return lines;
 }
 
-function win(symbol, player1, player2) {
-  const winner = symbol === PLY1_SYL ? player1 : player2;
-
-  if (winner === undefined) {
-    console.log(" 🤝🤝🤝🤝🤝  match draw 🤝🤝🤝🤝🤝");
-    console.log(" 👉 if you want to play again \n");
-    console.log(" 👉 please press upward arrow and press enter \n");
-    return;
-  }
-  console.log(" 🏆🏆🏆🏆🏆🏆 🥳 congratulations  ", winner, " 🥳 🏆🏆🏆🏆🏆🏆\n");
-  console.log(" 👉 if you want to play again \n");
-  console.log(" 👉 please press upward arrow and press enter \n");
-}
 
 function play(board, player1, player2) {
   const countX = [0, 0, 0, 0, 0, 0, 0, 0];
