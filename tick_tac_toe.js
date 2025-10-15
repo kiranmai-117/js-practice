@@ -46,10 +46,6 @@ function count(position, value, countX, countO) {
 
 function isTriple(position, value, countX, countO) {
   count(position, value, countX, countO);
-
-  console.log("countX", countX);
-  console.log("countO", countO);
-
   return countX.includes(3) || countO.includes(3);
 }
 
