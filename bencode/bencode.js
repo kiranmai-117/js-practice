@@ -52,3 +52,4 @@ testEncode("", "empty string", "0:");
 testEncode("hello world", "string with spaces", "11:hello world");
 testEncode("special!@#$%char", "string with specila characters", "16:special!@#$%char");
 testEncode(["apple", 123], "simple array", "l5:applei123ee");
+testEncode([], "empty array", "le");
