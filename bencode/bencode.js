@@ -1,6 +1,43 @@
+function decodeObject(bencode) {
+  const decodedList = [];
+  let endIndex = bencode.length;
+  let copyOfBencode = bencode;
+  //console.log("bencode", copyOfBencode);
+  
+  while (copyOfBencode != "") {
+    const startElement = copyOfBencode[0];
+    if (startElement === "l") {
+      //copyOfBencode = copyOfBencode.slice(1, endIndex);
+      //console.log("entered");
+      //console.log("bencode", copyOfBencode);
+      
+      decodedList.push(decode(copyOfBencode));
+      copyOfBencode = "";
+      continue;
+    }
+    
+    if (startElement === "i") {
+      endIndex = copyOfBencode.indexOf("e") + 1;
+    } else {
+      
+      const startOfString = copyOfBencode.indexOf(":");
+      const length = parseInt(copyOfBencode.slice(0, startOfString));
+      endIndex = length + startOfString + 1;
+      //console.log("entered string",copyOfBencode.slice(0, endIndex));
+      //console.log("bencode", copyOfBencode.slice(endIndex, copyOfBencode.length));
+    }
+
+    decodedList.push(decode(copyOfBencode.slice(0, endIndex)));
+    copyOfBencode = copyOfBencode.slice(endIndex, copyOfBencode.length);
+  }
+  //console.log(decodedList);
+  return decodedList;
+}
+
 function decodeString(bencode) {
   const length = bencode.length;
-  return bencode.slice(2, length);
+  const startIndex = bencode.indexOf(":") + 1;
+  return bencode.slice(startIndex, length);
 }
 
 function decodeInteger(bencode) {
@@ -28,8 +65,8 @@ function decode(bencode) {
   switch (type) {
     //case "": return decodeString(bencode);
     case "i": return decodeInteger(bencode);
-    case "l": return decodeObject(bencode);
-    default : return decodeString(bencode);
+    case "l": return decodeObject(bencode.slice(1,bencode.length - 1));
+    default: return decodeString(bencode);
   }
 }
 
@@ -43,7 +80,7 @@ function encode(data) {
 }
 
 function symbol(expectedValue, actualValue) {
-  return expectedValue === actualValue ? "✅" : "❌";
+  return `${expectedValue}` === `${actualValue}` ? "✅" : "❌";
 }
 
 function composeMessage(data, expected, actual, gist) {
@@ -84,15 +121,25 @@ function testAllEncode() {
   testEncode([0, "", ["test"]], "nested array with empty string", "li0e0:l4:testee");
   testEncode(["", 0, []], "nested array with empty array", "l0:i0elee");
   testEncode(["one", ["two", ["three"]]], "multiple nested array", "l3:onel3:twol5:threeeee");
+  testEncode(["one", ["two", ["three"]], 56], "multiple nested array", "l3:onel3:twol5:threeeei56ee");
 }
 
 function testAlldecode() {
-  console.log("\n  ENCODE DATA  \n");
+  console.log("\n  DECODE DATA  \n");
   testdecode("i123e", "decode an integer", 123);
   testdecode("i-23e", "negative integer", -23);
   testdecode("i0e", "zero", 0);
   testdecode("5:hello", "a simple string", "hello");
+  testdecode("0:", "empty string", "");
+  testdecode("11:hello world", "string with spaces", "hello world");
+  testdecode("16:special!@#$%char", "string with specila characters", "special!@#$%char");
+  testdecode("l5:applei123ee", "simple array", ["apple", 123]);
+  testdecode("le", "empty array", []);
+  testdecode("l5:applei123el6:bananai-5eee", "nested array", ["apple", 123, ["banana", -5]]);
+  testdecode("li0e0:l4:testee", "nested array with empty string", [0, "", ["test"]]);
+  testdecode("l0:i0elee", "nested array with empty array", ["", 0, []]);
+  testdecode("l3:onel3:twol5:threeeee", "multiple nested array", ["one", ["two", ["three"]]]);
 }
 
-//testAllEncode();
+testAllEncode();
 testAlldecode();
