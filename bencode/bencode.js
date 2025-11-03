@@ -1,5 +1,18 @@
-function encode(data) {
+function encodeString(data) {
+  return `${data.length}:${data}`;
+}
+
+function encodeInteger(data) {
   return `i${data}e`;
+}
+
+function encode(data) {
+  const type = typeof(data);
+  switch(type) {
+    case "string": return encodeString(data);
+    case "number": return encodeInteger(data);
+    case "object": return encodeObject(data);
+  }
 }
 
 function symbol(expectedValue, actualValue) {
@@ -25,3 +38,9 @@ function testEncode(data, gist, expected) {
 }
 
 testEncode(123, "encode an integer", "i123e");
+testEncode(-53, "negative intergers", "i-53e");
+testEncode(0, "zero", "i0e");
+testEncode("hello", "encode a string", "5:hello");
+testEncode("", "empty string", "0:");
+testEncode("hello world", "string with spaces", "11:hello world");
+testEncode("special!@#$%char", "string with specila characters", "16:special!@#$%char");
