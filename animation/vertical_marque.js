@@ -11,14 +11,12 @@ const makeScreen = (x, y) => {
 
 const screen = makeScreen(width, height);
 
-const verticalMarque = () => {
-  for (let i = 0; i < width; i++) {
-    let prev = screen[height - 1][i];
-    for (let j = 0; j < height; j++) {
-      const next = screen[j][i];
-      screen[j][i] = prev;
-      prev = next;
-    }
+const verticalMarque = (x) => {
+  let prev = screen[height - 1][x];
+  for (let j = 0; j < height; j++) {
+    const next = screen[j][x];
+    screen[j][x] = prev;
+    prev = next;
   }
   return screen.map((x) => x.join("")).join("\n");
 };
@@ -34,5 +32,5 @@ console.log(drawOnScreen(0, 6, "hello"));
 
 setInterval(() => {
   console.clear();
-  console.log(verticalMarque());
+  console.log(verticalMarque(6));
 }, 300);

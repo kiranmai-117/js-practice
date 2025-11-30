@@ -23,11 +23,24 @@ const clearScreen = (screen) => {
 
 let x = 0;
 let y = 0;
-
+const char = ["___======____=---=)",
+"/T            \_--===)",
+" [ \ (0)   \~    \_-==)",
+"  \      / )J~~    \-=)",
+"   \\\\___/  )JJ~~~   \)",
+"    \_____/JJ~~~~~    \\",
+"    / \  , \J~~~~~     \\",
+'   (-\)\=|\\\\\~~~~       L__',
+'   (\\\\)  (\\\\\)_           \==__',
+"    \V    \\\\\) ===_____   \\\\\\\\\\\\",
+"           \V)     \_) \\\\\\\\JJ\J\)",
+'                       /J\JT\JJJJ)',
+'                       (JJJ| \UUU)',
+'                        (UU)'];
 setInterval(() => {
   x = (x + 1) % 10;
-  y = (y + 1) % 10;
+  // y = (y + 1) % 10;
     console.clear();
-    console.log(drawOnScreen(screen,x,y,"*"));
+    console.log(drawOnScreen(screen,x,y,char.join("\n")));
   clearScreen(screen);
-}, 100);
+}, 500);

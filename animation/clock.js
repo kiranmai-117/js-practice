@@ -1,6 +1,6 @@
 const radius = 5;
-const center = 9;
-const size = 20;
+const center = 7;
+const size = 15;
 
 const makeScreen = (x) => {
   const screen = [];
@@ -22,11 +22,10 @@ function distanceBetween(p1, p2) {
 }
 
 function drawCircle(width, height, cx, cy, radius) {
-
   for (let h = 0; h < height; h++) {
     for (let w = 0; w < width; w++) {
       const d = distanceBetween([w, h], [cx, cy]);
-      const char = (d < radius) ? "⚫️" : "🔲";
+      const char = (d < radius) ? "⚫️" : "⚪️";
       screen[h][w] = char;
     }
   }
@@ -34,19 +33,19 @@ function drawCircle(width, height, cx, cy, radius) {
 
 const uppernums = () => {
   const values = [];
-  for (let i = center; i < radius + center ; i++) {
+  for (let i = center; i < radius + center; i++) {
     values.push(i);
   }
   return values;
-}
+};
 
 const lowernums = () => {
   const values = [];
-  for (let i = center; i >( center - radius) ; i--) {
+  for (let i = center; i > (center - radius); i--) {
     values.push(i);
   }
   return values;
-}
+};
 
 const atcenter = () => {
   const values = [];
@@ -54,16 +53,17 @@ const atcenter = () => {
     values.push(center);
   }
   return values;
-}
+};
 
-const rotations = {r1 : {x : [...atcenter()], y : [...lowernums()]},
- r2 : {x : [...uppernums()], y : [...lowernums()]},
- r3 : {x : [...uppernums()], y : [...atcenter()]},
- r4 : {x : [...uppernums()], y : [...uppernums()]},
- r5 : {x : [...atcenter()], y :  [...uppernums()]},
- r6 : {x : [...lowernums()], y : [...uppernums()]},
- r7 : {x : [...lowernums()], y : [...atcenter()]},
- r8 : {x : [...lowernums()], y : [...lowernums()]},
+const rotations = {
+  r1: { x: [...atcenter()], y: [...lowernums()] },
+  r2: { x: [...uppernums()], y: [...lowernums()] },
+  r3: { x: [...uppernums()], y: [...atcenter()] },
+  r4: { x: [...uppernums()], y: [...uppernums()] },
+  r5: { x: [...atcenter()], y: [...uppernums()] },
+  r6: { x: [...lowernums()], y: [...uppernums()] },
+  r7: { x: [...lowernums()], y: [...atcenter()] },
+  r8: { x: [...lowernums()], y: [...lowernums()] },
 };
 
 const drawOnScreen = (x, y) => {
@@ -71,10 +71,10 @@ const drawOnScreen = (x, y) => {
     screen[y[i]][x[i]] = "⚪️";
   }
   return screen.map((x) => x.join("")).join("\n");
-}
+};
 
 const clearScreen = () => {
-  drawCircle(size,size,center,center,radius);
+  drawCircle(size, size, center, center, radius);
 };
 
 const rotate = () => {
@@ -83,9 +83,9 @@ const rotate = () => {
     setInterval(() => {
       console.clear();
       setTimeout(clearScreen, 0);
-      console.log(drawOnScreen(rotations[rotaion].x,rotations[rotaion].y));
-    }, i*50);
-    i = i + 2;
+      console.log(drawOnScreen(rotations[rotaion].x, rotations[rotaion].y));
+    }, i * 50);
+    i += 2;
   }
 };
 
