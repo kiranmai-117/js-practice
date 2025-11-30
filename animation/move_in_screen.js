@@ -1,0 +1,33 @@
+const makeScreen = (x) => {
+  const screen = [];
+  for (let i = 0; i < x; i++) {
+    screen.push(" ".repeat(x).split(""));
+  }
+  return screen;
+};
+
+const screen = makeScreen(10);
+
+const drawOnScreen = (screen, x, y, char) => {
+  screen[x][y] = char;
+  return screen.map(x => x.join("")).join("\n");
+};
+
+const clearScreen = (screen) => {
+  for (const i in screen) {
+    for (const j in screen[i]) {
+      screen[i][j] = " ";
+    }
+  }
+};
+
+let x = 0;
+let y = 0;
+
+setInterval(() => {
+  x = (x + 1) % 10;
+  y = (y + 1) % 10;
+    console.clear();
+    console.log(drawOnScreen(screen,x,y,"*"));
+  clearScreen(screen);
+}, 100);
