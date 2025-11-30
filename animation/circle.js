@@ -1,4 +1,4 @@
-const radius = 6;
+let radius = 6;
 const height = 20;
 const width = 20;
 const center = 7;
@@ -11,6 +11,7 @@ const makeScreen = (height, width) => {
   }
   return screen;
 };
+
 const screen = makeScreen(height, width);
 
 const drawOnScreen = (x, y, char) => {
@@ -21,8 +22,11 @@ const drawOnScreen = (x, y, char) => {
 setInterval(() => {
   const y = Math.round(radius * 0.5 * Math.sin(rad * 0.0174) + center);  
   const x = Math.round(radius * Math.cos(rad * 0.0174) + center);  
-
   console.clear();
   console.log(drawOnScreen(x, y, "*"));
-  rad++;
-}, 10)
+  rad += 1;
+  if (rad > 360 && radius > 0) {
+    radius--;
+    rad = 1
+  }
+}, 1)
