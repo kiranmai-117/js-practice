@@ -31,42 +31,17 @@ function drawCircle(width, height, cx, cy, radius) {
   }
 }
 
-const uppernums = () => {
-  const values = [];
-  for (let i = center; i < radius + center; i++) {
-    values.push(i);
+const angles = (rad) => {
+  const x = [];
+  const y = [];
+  for (let i = radius; i >= 0 ; i--) {
+    y.push(Math.round(i * Math.sin(rad * 0.0174) + center));
+    x.push(Math.round(i * Math.cos(rad * 0.0174) + center));
   }
-  return values;
-};
+  return [x,y];
+}
 
-const lowernums = () => {
-  const values = [];
-  for (let i = center; i > (center - radius); i--) {
-    values.push(i);
-  }
-  return values;
-};
-
-const atcenter = () => {
-  const values = [];
-  for (let i = 1; i <= radius; i++) {
-    values.push(center);
-  }
-  return values;
-};
-
-const rotations = {
-  r1: { x: [...atcenter()], y: [...lowernums()] },
-  r2: { x: [...uppernums()], y: [...lowernums()] },
-  r3: { x: [...uppernums()], y: [...atcenter()] },
-  r4: { x: [...uppernums()], y: [...uppernums()] },
-  r5: { x: [...atcenter()], y: [...uppernums()] },
-  r6: { x: [...lowernums()], y: [...uppernums()] },
-  r7: { x: [...lowernums()], y: [...atcenter()] },
-  r8: { x: [...lowernums()], y: [...lowernums()] },
-};
-
-const drawOnScreen = (x, y) => {
+const drawOnScreen = ([x, y]) => {
   for (let i = 0; i < x.length; i++) {
     screen[y[i]][x[i]] = "⚪️";
   }
@@ -79,14 +54,12 @@ const clearScreen = () => {
 
 const rotate = () => {
   let i = 1;
-  for (const rotaion of Object.keys(rotations)) {
     setInterval(() => {
       console.clear();
-      setTimeout(clearScreen, 0);
-      console.log(drawOnScreen(rotations[rotaion].x, rotations[rotaion].y));
+      clearScreen();
+      console.log(drawOnScreen(angles(i)));
+      i += 2;
     }, i * 50);
-    i += 2;
-  }
 };
 
 rotate();
