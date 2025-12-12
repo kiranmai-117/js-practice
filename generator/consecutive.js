@@ -1,8 +1,8 @@
-function* generator() {
-  let i = 1;
+function* consecutive(numbers) {
+  let index = 0;
   while (true) {
-    yield [i++, i];
+    yield [numbers[index++], numbers[index]];
   }
 }
 
-const consecutive = generator();
+const x = consecutive([1, 2, 3, 4, 5]);
