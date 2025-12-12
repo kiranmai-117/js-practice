@@ -1,0 +1,13 @@
+function* evenPartion(numbers) {
+  let partition = [];
+  for (let index = 0; index < numbers.length; index++) {
+    partition.push(numbers[index]);
+    if (partition[partition.length - 1] % 2 !== numbers[index + 1] % 2) {
+      yield partition;
+      partition = [];
+    }
+  }
+}
+
+const x = evenPartion([1, 1, 3, 2, 2, 3, 4, 4, 6, 7]);
+console.log([...x]);
