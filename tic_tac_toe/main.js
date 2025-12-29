@@ -27,9 +27,13 @@ export const display = (board) => {
 const main = () => {
   const board = generateBoard();
   display(board);
+  const bot = confirm("play with computer");
   const player1 = prompt("enter your name");
-  const player2 = prompt("enter your name");
-  play(board, player1, player2);
+  let player2 = "COMPUTER";
+  if (!bot) {
+    player2 = prompt("enter your name");
+  }
+  play(board, player1, player2, bot);
 };
 
 main();

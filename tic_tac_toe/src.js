@@ -37,16 +37,55 @@ export function getPosition(player, ply1moves, ply2moves) {
   return position;
 }
 
-export function play(board, name1, name2) {
+const corners = [1, 3, 7, 9];
+
+export function computer(ply1moves, ply2moves, pos) {
+  let position;
+  // console.log(pos);
+  if (!ply1moves.includes(5) && !ply2moves.includes(5)) {
+    position = 5;
+  } else if (corners.includes(pos) && corners.length !== 4) {
+    if (ply1moves.includes(pos - 6)) {
+      position = pos - 3;
+    } else if (ply1moves.includes(pos + 6)) {
+      position = pos + 3;
+    } else if (ply1moves.includes(pos + 2)) {
+      position = pos + 1;
+    } else if (ply1moves.includes(pos - 2)) {
+      position = pos - 1;
+    }
+  } else if (corners.length) {
+    position = corners.shift();
+  } else {
+    position = Math.ceil(Math.random() * 9);
+  }
+
+  if (!isValid(position, ply1moves, ply2moves)) {
+    position = computer(ply1moves, ply2moves, pos);
+  }
+  return position;
+}
+
+export function play(board, name1, name2, bot) {
   const player1 = { name: name1, symbol: "X", moves: [] };
   const player2 = { name: name2, symbol: "O", moves: [] };
   let player = player2;
-  while (!isWin(player)) {
+  let position;
+  for (let i = 0; i < 9; i++) {
     player = (player === player1) ? player2 : player1;
-    const position = getPosition(player, player1.moves, player2.moves);
+    if (bot && player === player2) {
+      position = computer(player1.moves, player2.moves, position);
+    } else {
+      position = getPosition(player, player1.moves, player2.moves);
+    }
     updateBoard(board, position, player.symbol);
     console.clear();
     display(board);
     player.moves.push(position);
+    if (isWin(player)) {
+      console.log(player.name, "WON");
+      return;
+    }
   }
+  console.log("MATCH DRAW");
 }
