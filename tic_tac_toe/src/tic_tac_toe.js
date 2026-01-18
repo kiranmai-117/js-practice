@@ -1,5 +1,4 @@
-import { updateBoard } from "./main.js";
-import { display } from "./main.js";
+import { display, updateBoard } from "../main.js";
 
 export function isWin(player) {
   const winPositions = [

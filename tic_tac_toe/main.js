@@ -1,5 +1,5 @@
 import { chunk } from "jsr:@std/collections/chunk";
-import { play } from "./src.js";
+import { play } from "./src/tic_tac_toe.js";
 
 function* cells() {
   while (true) {
