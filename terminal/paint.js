@@ -22,14 +22,14 @@ const readRawdata = async () => {
     if (n.value[0] === 3) break;
     const pos = JSON.stringify(new TextDecoder().decode(n.value));
     const values = pos.match(/\d+;\d+;\d+/g)[0];
-    const [_,x,y] = values.split(';');
-    await draw(x,y);
+    const [_, x, y] = values.split(';');
+    await draw(x, y);
   }
 }
 
-const draw = async (x,y) => {
+const draw = async (x, y) => {
   const encoder = new TextEncoder();
-  await Deno.stdout.write(encoder.encode(`\x1b[${x};${y}H\x1b[44;5;15m \x1b[0m`));
+  await Deno.stdout.write(encoder.encode(`\x1b[${y};${x}H\x1b[44;5;15m \x1b[0m`));
 }
 
 const main = async () => {
