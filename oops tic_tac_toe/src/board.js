@@ -23,6 +23,7 @@ export class board {
 
   display = () => {
     const rows = chunk(this.board, 3);
+    console.clear();
     console.log(
       rows.map((row) => row.join("")).join("\n--------------------\n"),
     );
