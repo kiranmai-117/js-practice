@@ -1,19 +1,4 @@
-import { chunk } from "@std/collections";
-
-const getGameState = async (conn) => {
-  const buffer = new Uint8Array(1024);
-  const n = await conn.read(buffer);
-  const state = new TextDecoder().decode(buffer.slice(0, n));
-  return JSON.parse(state);
-}
-
-const displayBoard = (board) => {
-  const rows = chunk(board, 3);
-  console.clear();
-  console.log(
-    rows.map((row) => row.join("")).join("\n--------------------\n"),
-  );
-};
+import { Board } from "./board.js";
 
 const enableRawMode = () => {
   Deno.stdin.setRaw(true);
@@ -32,6 +17,13 @@ const disableRawMode = () => {
   Deno.stdin.setRaw(false);
 }
 
+const getGameState = async (conn) => {
+  const buffer = new Uint8Array(1024);
+  const n = await conn.read(buffer);
+  const state = new TextDecoder().decode(buffer.slice(0, n));
+  return JSON.parse(state);
+}
+
 const getMouseClicks = async () => {
   const reader = Deno.stdin.readable.getReader();
   while (true) {
@@ -45,6 +37,7 @@ const getMouseClicks = async () => {
       return [parseInt(x), parseInt(y)];
     }
   }
+  await reader.releaseLock();
 }
 
 const mapToCells = async () => {
@@ -58,18 +51,17 @@ const mapToCells = async () => {
 }
 
 const isValid = (position, ply1moves, ply2moves) => {
-  console.log({ ply1moves, ply2moves });
-  console.log(position > 0, position < 10, !ply1moves.includes(position), !ply2moves.includes(position));
+
   return position > 0 && position < 10 && !ply1moves.includes(position) &&
     !ply2moves.includes(position);
 }
 
-const getPosition = async (ply1moves, ply2moves) => {
-  console.log('called');
+const getPosition = async (players) => {
+  const [p1, p2] = players;
   let position = await mapToCells();
-  if (!isValid(position, ply1moves, ply2moves)) {
-    console.log('invalid position', position);
-    position = getPosition(ply1moves, ply2moves);
+  if (!isValid(position, p1.moves, p2.moves)) {
+
+    position = getPosition(players);
   }
   return position;
 }
@@ -77,52 +69,51 @@ const getPosition = async (ply1moves, ply2moves) => {
 const sendPosition = async (conn, position) => {
   const json = JSON.stringify({ position });
   await conn.write(new TextEncoder().encode(json));
-  console.log('data sent');
+
+}
+
+
+let i = 0
+
+const fakeInput = (id) => {
+  if (id === "x") {
+    return [1, 2, 3, 4][i++]
+  }
+
+  return [5, 6, 7, 8, 9][i++]
 }
 
 const play = async (conn) => {
-  // let state = { p1Moves: [], p2Moves: [] };
-  const state = await getGameState(conn);
+  const board = new Board(9);
+  board.init();
+  const { id } = await getGameState(conn);
+  let { game } = await getGameState(conn);
 
+  while (!(game.isEnd)) {
+    board.display();
+    console.log("ID :", id);
 
-  const id = state.id;
+    if (game.chanceOf === id) {
+      // const input = fakeInput(id);
+      console.log(game);
 
-  while (true) {
-    let state = await getGameState(conn);
-    displayBoard(state.board);
-    if (state.done) break;
-
-    if (state.id !== id) {
-      console.log("waiting");
-      console.log("ID GOT", state.id, id);
-      state = await getGameState(conn);
-      displayBoard(state.board);
-      if (state.done) break;
+      const input = await getPosition(game.players);
+      // prompt("")
+      await sendPosition(conn, input);
     }
-
-    const position = await getPosition(state.p1Moves, state.p2Moves);
-    console.log({ position });
-    await sendPosition(conn, position);
-    // displayBoard(state.board);
+    const data = await getGameState(conn);
+    game = data.game;
+    board.updateBoard(game.players);
+    board.display();
   }
   return 'done';
-}
-
-const start = async (conn) => {
-  // const state = await getGameState(conn);
-  // displayBoard(state.board);
-  await play(conn);
 }
 
 const main = async () => {
   const conn = await Deno.connect({
     port: 8000
   });
-
-  await start(conn);
+  await play(conn);
 }
 
 await main();
-
-disableRawMode()
-
