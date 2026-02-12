@@ -93,9 +93,13 @@ const play = async (conn) => {
     board.display();
     console.log("ID :", id);
 
+    if (game.isWin) {
+      return;
+    }
+
     if (game.chanceOf === id) {
       // const input = fakeInput(id);
-      console.log(game);
+      console.log("it's your turn...");
 
       const input = await getPosition(game.players);
       // prompt("")

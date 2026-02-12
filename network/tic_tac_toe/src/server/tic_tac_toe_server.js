@@ -19,7 +19,7 @@ const play = async (players, game) => {
 
     await broadCast(allConnection, { game: gameDetails })
 
-    if (gameDetails.isEnd) {
+    if (gameDetails.isEnd || gameDetails.isWin) {
       return
     }
   }
@@ -75,11 +75,11 @@ const main = async () => {
 
   const listener = Deno.listen({ port: 8000 });
   for await (const conn of listener) {
-    connections.push(conn)
+    connections.push(conn);
     if (connections.length === 2) {
       const room = await createRoom(...connections)
-      runRoom(room)
-      connections.length = 0
+      runRoom(room);
+      connections.length = 0;
     }
   }
 

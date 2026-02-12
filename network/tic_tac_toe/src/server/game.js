@@ -25,9 +25,9 @@ export class Game {
         { id: this.p1, moves: this.p1Moves },
         { id: this.p2, moves: this.p2Moves }
       ],
-      isWin: this.checkWin(),
+      isWin: this.checkWin(this.p1Moves) || this.checkWin(this.p2Moves),
       isDraw: this.isDraw(),
-      isEnd: this.checkWin() || this.isDraw(),
+      isEnd: this.checkWin(this.players[this.chanceOf]) || this.isDraw(),
       chanceOf: this.chanceOf === 0 ? this.p1 : this.p2
     }
   }
@@ -37,9 +37,7 @@ export class Game {
     this.chanceOf = 1 - this.chanceOf;
   }
 
-  checkWin() {
-    console.log(this.players[this.chanceOf]);
-    const moves = this.players[this.chanceOf]
+  checkWin(moves) {
     for (let i = 0; i < this.winPositions.length; i++) {
       const count = this.winPositions[i].reduce((count, pos) => {
         if (moves.includes(pos)) {
