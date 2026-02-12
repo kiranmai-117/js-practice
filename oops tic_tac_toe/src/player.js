@@ -27,6 +27,7 @@ export class player {
   getMoves() {
     return this.moves.slice();
   }
+
   enableRawMode = () => {
     Deno.stdin.setRaw(true);
     const encoder = new TextEncoder();

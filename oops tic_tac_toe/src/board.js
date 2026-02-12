@@ -9,7 +9,7 @@ export class board {
     return " ".repeat(5) + "|";
   }
 
-  generateBoard = () => {
+  init = () => {
     for (let i = 0; i < this.noOfCells; i++) {
       this.board.push(this.cell());
     }
@@ -29,3 +29,13 @@ export class board {
     );
   };
 }
+
+
+// board 
+//  -> build
+//  -> state 
+//  -> update
+//  -> validate position
+
+// ui
+//  => board -> state -> print 
