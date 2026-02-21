@@ -1,4 +1,12 @@
-import { Board } from "./board.js";
+import { chunk } from "@std/collections";
+
+const display = (board) => {
+  const rows = chunk(board, 3);
+  console.clear();
+  console.log(
+    rows.map((row) => row.join("")).join("\n--------------------\n"),
+  );
+};
 
 const enableRawMode = () => {
   Deno.stdin.setRaw(true);
@@ -75,23 +83,23 @@ const sendPosition = async (conn, position) => {
 
 let i = 0
 
-const fakeInput = (id) => {
-  if (id === "x") {
-    return [1, 2, 3, 4][i++]
-  }
+// const fakeInput = (id) => {
+//   if (id === "x") {
+//     return [1, 2, 3, 4][i++]
+//   }
 
-  return [5, 6, 7, 8, 9][i++]
-}
+//   return [5, 6, 7, 8, 9][i++]
+// }
 
 const play = async (conn) => {
-  const board = new Board(9);
-  board.init();
+  // const board = new Board(9);
+  // board.init();
   const { id } = await getGameState(conn);
-  let { game } = await getGameState(conn);
+  let { game, board } = await getGameState(conn);
 
   while (!(game.isEnd)) {
-    board.display();
-    console.log("ID :", id);
+    display(board);
+    // console.log("ID :", id);
 
     if (game.isWin) {
       return;
@@ -107,8 +115,9 @@ const play = async (conn) => {
     }
     const data = await getGameState(conn);
     game = data.game;
-    board.updateBoard(game.players);
-    board.display();
+    board = data.board;
+    // board.updateBoard(game.players);
+    display(board);
   }
   return 'done';
 }

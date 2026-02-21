@@ -2,8 +2,8 @@ export class Game {
   constructor(p1 = "x", p2 = "o") {
     this.p1 = p1
     this.p2 = p2
-    this.p1Moves = []
-    this.p2Moves = []
+    this.p1Moves = [];
+    this.p2Moves = [];
     this.players = [this.p1Moves, this.p2Moves]
     this.chanceOf = 0;
     this.winPositions = [
@@ -32,9 +32,16 @@ export class Game {
     }
   }
 
+  getSymbol(){
+    return this.chanceOf === 0 ? this.p1 : this.p2;
+  }
+
+  changeTurn(){
+    this.chanceOf = 1 - this.chanceOf;
+  }
+
   setMove(pos) {
     this.players[this.chanceOf].push(pos);
-    this.chanceOf = 1 - this.chanceOf;
   }
 
   checkWin(moves) {

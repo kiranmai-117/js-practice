@@ -1,3 +1,4 @@
+import { Board } from "./board.js";
 import { Game } from "./game.js";
 
 const getPosition = async (conn) => {
@@ -7,17 +8,22 @@ const getPosition = async (conn) => {
   return JSON.parse(state);
 }
 
-const play = async (players, game) => {
+const play = async (players, game, board) => {
 
-  const allConnection = players.map(({ conn }) => conn)
+  const allConnection = players.map(({ conn }) => conn);
 
   for (let i = 0; i < 9; i++) {
 
     const { position } = await getPosition(players[i % 2].conn);
+    board.updateBoard(position, game.getSymbol());
     game.setMove(position);
-    const gameDetails = game.getDetails()
+    game.changeTurn();
+    const gameDetails = game.getDetails();
 
-    await broadCast(allConnection, { game: gameDetails })
+    await broadCast(allConnection, {
+      game: gameDetails,
+      board: board.board
+    })
 
     if (gameDetails.isEnd || gameDetails.isWin) {
       return
@@ -33,15 +39,20 @@ const broadCast = async (connections, data) => {
   }
 }
 
-const start = async (...players) => {
+const start = async (board, ...players) => {
 
   const game = new Game(...players.map(({ id }) => id))
 
   const allConnection = players.map(({ conn }) => conn)
 
-  await broadCast(allConnection, { game: game.getDetails(), chanceOf: players[0].symbol })
+  await broadCast(allConnection,
+    {
+      game: game.getDetails(),
+      // chanceOf: players[0].symbol,
+      board: board.board
+    })
 
-  await play(players, game);
+  await play(players, game, board);
 }
 
 
@@ -67,7 +78,9 @@ const createRoom = async (c1, c2) => {
 
 
 const runRoom = async ({ player1, player2 }) => {
-  await start(player1, player2);
+  const board = new Board(9);
+  board.init();
+  await start(board, player1, player2);
 }
 
 const main = async () => {

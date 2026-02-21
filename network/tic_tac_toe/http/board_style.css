@@ -1,0 +1,14 @@
+.board{
+height: 200px;
+width : 200px;
+padding: 20px;
+background-color: hsl(205, 23%, 42%);
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+}
+
+.cell{
+height: 60px;
+width: 60px;
+background-color: aqua;
+}
