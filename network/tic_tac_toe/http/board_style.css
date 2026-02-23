@@ -1,8 +1,8 @@
 .board{
 height: 200px;
 width : 200px;
-padding: 20px;
-background-color: hsl(205, 23%, 42%);
+padding: 5px 0px 0px 5px;
+background-color: hsl(205, 40%, 78%);
 display: grid;
 grid-template-columns: 1fr 1fr 1fr;
 }
@@ -10,5 +10,13 @@ grid-template-columns: 1fr 1fr 1fr;
 .cell{
 height: 60px;
 width: 60px;
-background-color: aqua;
+background-color: hsl(205, 40%, 78%);
+text-decoration: none;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 600;
+font-size: 20px;
+color: hsl(205, 40%, 40%);
+box-shadow: 0px 0px 5px 1px  hsl(205, 40%, 60%);
 }
