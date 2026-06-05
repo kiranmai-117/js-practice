@@ -32,6 +32,11 @@ const draw = async (x, y) => {
   await Deno.stdout.write(encoder.encode(`\x1b[${y};${x}H\x1b[44;5;15m \x1b[0m`));
 }
 
+const erase = async (x, y) => {
+  const encoder = new TextEncoder();
+  await Deno.stdout.write(encoder.encode(`\x1b[${y};${x}H\x1b[40;5;15m \x1b[0m`));
+}
+
 const main = async () => {
   enableRawMode();
   await readRawdata();

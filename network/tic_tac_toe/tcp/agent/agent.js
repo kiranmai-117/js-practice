@@ -80,43 +80,27 @@ const sendPosition = async (conn, position) => {
 
 }
 
-
-let i = 0
-
-// const fakeInput = (id) => {
-//   if (id === "x") {
-//     return [1, 2, 3, 4][i++]
-//   }
-
-//   return [5, 6, 7, 8, 9][i++]
-// }
-
 const play = async (conn) => {
-  // const board = new Board(9);
-  // board.init();
+
   const { id } = await getGameState(conn);
   let { game, board } = await getGameState(conn);
 
   while (!(game.isEnd)) {
     display(board);
-    // console.log("ID :", id);
 
     if (game.isWin) {
       return;
     }
 
     if (game.chanceOf === id) {
-      // const input = fakeInput(id);
       console.log("it's your turn...");
 
       const input = await getPosition(game.players);
-      // prompt("")
       await sendPosition(conn, input);
     }
     const data = await getGameState(conn);
     game = data.game;
     board = data.board;
-    // board.updateBoard(game.players);
     display(board);
   }
   return 'done';
